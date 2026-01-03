@@ -1,0 +1,37 @@
+---
+- name: Database Setup
+  hosts: database
+  become: yes
+  vars_files:
+    - ../secret.yml
+  
+  tasks:
+    - name: Install MariaDB
+      yum:
+        name: mariadb-server
+        state: present
+
+    - name: Start service MariaDB
+      service:
+        name: mariadb
+        state: started
+
+    - name: Install Dependencies PyMySQL
+      yum:
+        name: python3-PyMySQL
+        state: present
+
+    - name: Create New Database with name Account
+      mysql_db:
+        name: accounts
+        state: present
+        login_unix_socket: /var/lib/mysql/mysql.sock
+
+    - name: Create database user with name 'testuser' and password '12345' with all database privileges
+      mysql_user:
+        name: testuser
+          # password: 12345
+        password:  "{{ db_password }}"
+        priv: '*.*:ALL'
+        state: present
+        login_unix_socket: /var/lib/mysql/mysql.sock

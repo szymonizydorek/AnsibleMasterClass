@@ -1,0 +1,27 @@
+---
+- name: install docker.io
+  apt:
+    name: docker.io
+    state: present
+
+- name: Pull Jenkins Docker image
+  docker_image:
+    name: "{{ image_name }}"
+    source: pull
+
+- name: Create Docker network for Jenkins
+  docker_network:
+    name: jenkins_net
+    driver: bridge
+
+- name: Create a Jenkins container
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ image_name }}"
+    ports:
+      - "8080:8080"
+      - "50000:50000"  
+    volumes:
+     - jenkins_home:/var/jenkins_home
+    networks:
+      - name: jenkins_net

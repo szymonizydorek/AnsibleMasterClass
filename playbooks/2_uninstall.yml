@@ -1,0 +1,20 @@
+---
+- name: Webserver Setup
+  hosts: webservers
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Uninstall NGINX
+      apt:
+        name: nginx
+        state: absent
+
+- name: Database Setup
+  hosts: database
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Uninstall Maria
+      yum:
+        name: mariadb-server
+        state: absent 

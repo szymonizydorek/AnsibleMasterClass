@@ -1,0 +1,36 @@
+- name: Webserver Setup
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: latest
+        update_cache: yes
+
+    - name: Start Nginx Service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Copy Index File to Webserver
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        mode: '0644'
+
+- name: Database Setup
+  hosts: database
+  become: yes
+  tasks:
+    - name: Install Maria
+      yum:
+        name: mariadb-server
+        state: latest
+
+    - name: Start mariadb service
+      service:
+        name: mariadb
+        state: started
+        enabled: true 

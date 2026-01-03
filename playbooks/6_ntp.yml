@@ -1,0 +1,30 @@
+---
+- name: NTP Configuration
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install NTP Agent on RHEL
+      yum:
+        name: chrony
+        state: present
+      when: ansible_distribution == 'CentOS'
+
+    - name: Install NTP Agent on Ubuntu
+      apt:
+         name: ntp
+         state: present
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Start NTP Agent on Rhel
+      service:
+        name: chronyd
+        state: started
+        enabled: yes
+      when: ansible_distribution == 'CentOS'
+
+    - name: Install NTP Agent on Ubuntu
+      service:
+         name: ntp
+         state: started
+         enabled: yes
+      when: ansible_distribution == 'Ubuntu'

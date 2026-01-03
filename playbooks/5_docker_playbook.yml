@@ -1,0 +1,7 @@
+---
+- name: Jenkins Deployment with Docker
+  hosts: Web01-Ubuntu
+  become: yes
+  gather_facts: false
+  roles:
+    - docker_container_role
